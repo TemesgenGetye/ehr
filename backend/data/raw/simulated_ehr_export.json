@@ -1,0 +1,182 @@
+[
+  {
+    "patient_id": "P-101",
+    "mrn": " mrn-1001-a ",
+    "full_name": "Johnathan Smith",
+    "birth_date": "05/14/1980",
+    "gender": "M",
+    "phone": " (555) 234-5678 ",
+    "email": "J.SMITH@EXAMPLE.COM",
+    "documents": [
+      {
+        "id": "DOC-JSON-001",
+        "title": "Initial Emergency Department Consultation",
+        "category": "clinical-note",
+        "date": "10/12/2023 14:30:00",
+        "clinician": null,
+        "content_text": "Patient presents with acute subretinal and epigastric discomfort radiating to left scapula. Past medical history includes hypertension and type 2 diabetes mellitus. Blood pressure 148/92 mmHg, pulse 88 bpm. EKG demonstrates non-specific ST segment abnormalities.",
+        "encounter_id": "ENC-001"
+      }
+    ],
+    "diagnostic_reports": [
+      {
+        "id": "RPT-JSON-001",
+        "code": "24357-6",
+        "code_display": "Urinalysis macro (dipstick) panel",
+        "category": "LAB",
+        "effective_date": "2023-10-12T16:00:00",
+        "status": "FINAL",
+        "conclusion": "Trace proteinuria detected, negative for leukocytes and nitrites.",
+        "results": {
+          "protein": "trace",
+          "glucose": "negative",
+          "leukocytes": "negative"
+        },
+        "encounter_id": "ENC-001"
+      }
+    ]
+  },
+  {
+    "patient_id": "P-102",
+    "mrn": "MRN1002B",
+    "full_name": "Emily Davis",
+    "birth_date": "1992.07.21",
+    "gender": "Female",
+    "phone": "555-987-6543",
+    "email": "emily.davis@healthnet.org",
+    "documents": [
+      {
+        "id": "DOC-JSON-002",
+        "title": "Inpatient Discharge Summary",
+        "category": "discharge-summary",
+        "date": "2023-11-05",
+        "clinician": "Dr. Sarah Chen, MD",
+        "content_text": "31-year-old female admitted for acute exacerbation of severe asthma. Responded favorably to systemic intravenous corticosteroid pulse therapy and bronchodilator nebulization. Peak expiratory flow improved from 210 L/min to 420 L/min. Discharged on fluticasone/salmeterol inhaler with outpatient pulmonology follow-up.",
+        "encounter_id": "ENC-002"
+      }
+    ],
+    "diagnostic_reports": [
+      {
+        "id": "RPT-JSON-002",
+        "code": "24606-6",
+        "code_display": "Chest X-ray single view frontal",
+        "category": "RAD",
+        "effective_date": "11/04/2023 09:15",
+        "status": "final",
+        "conclusion": "Bilateral hyperinflation without focal consolidation, pneumothorax, or pleural effusion.",
+        "results": {
+          "hyperinflation": "present",
+          "consolidation": "none",
+          "pneumothorax": "none"
+        },
+        "encounter_id": "ENC-002"
+      }
+    ]
+  },
+  {
+    "patient_id": "P-102",
+    "mrn": "MRN1002B",
+    "full_name": "Emily Davis",
+    "birth_date": "1992.07.21",
+    "gender": "Female",
+    "phone": "555-987-6543",
+    "email": "emily.davis@healthnet.org",
+    "documents": [
+      {
+        "id": "DOC-JSON-002",
+        "title": "Inpatient Discharge Summary",
+        "category": "discharge-summary",
+        "date": "2023-11-05",
+        "clinician": "Dr. Sarah Chen, MD",
+        "content_text": "31-year-old female admitted for acute exacerbation of severe asthma. Responded favorably to systemic intravenous corticosteroid pulse therapy and bronchodilator nebulization. Peak expiratory flow improved from 210 L/min to 420 L/min. Discharged on fluticasone/salmeterol inhaler with outpatient pulmonology follow-up.",
+        "encounter_id": "ENC-002"
+      }
+    ],
+    "diagnostic_reports": [
+      {
+        "id": "RPT-JSON-002",
+        "code": "24606-6",
+        "code_display": "Chest X-ray single view frontal",
+        "category": "RAD",
+        "effective_date": "11/04/2023 09:15",
+        "status": "final",
+        "conclusion": "Bilateral hyperinflation without focal consolidation, pneumothorax, or pleural effusion.",
+        "results": {
+          "hyperinflation": "present",
+          "consolidation": "none",
+          "pneumothorax": "none"
+        },
+        "encounter_id": "ENC-002"
+      }
+    ]
+  },
+  {
+    "patient_id": "P-103",
+    "mrn": "MRN-1003-C",
+    "full_name": "Robert Martinez",
+    "birth_date": "11-03-1965",
+    "gender": "MALE",
+    "phone": "555-333-4444",
+    "email": "rmartinez@email.com",
+    "documents": [
+      {
+        "id": "DOC-JSON-003",
+        "title": "Cardiology Progress Note",
+        "category": "clinical-note",
+        "date": "12-01-2023",
+        "clinician": "Dr. Marcus Vance",
+        "content_text": "Follow-up for known ischemic cardiomyopathy. Patient reports mild exertional dyspnea when climbing two flights of stairs. Orthopnea denied. Medication adherence to carvedilol and lisinopril confirmed. Plan: continue current guideline-directed medical therapy.",
+        "encounter_id": "ENC-003"
+      }
+    ],
+    "diagnostic_reports": []
+  },
+  {
+    "patient_id": "P-103-CONFLICT",
+    "mrn": "MRN-1003-C",
+    "full_name": "Bob Martinez",
+    "birth_date": "1965/11/03",
+    "gender": "m",
+    "phone": "555-333-4444",
+    "email": "rmartinez@email.com",
+    "documents": [],
+    "diagnostic_reports": []
+  },
+  {
+    "patient_id": "P-104",
+    "mrn": "MRN-1004-D",
+    "full_name": "Sarah Connor",
+    "birth_date": "1985-12-30T00:00:00Z",
+    "gender": "f",
+    "phone": null,
+    "email": null,
+    "documents": [
+      {
+        "id": "DOC-JSON-004",
+        "title": "Neurology Outpatient Evaluation",
+        "category": "clinical-note",
+        "date": "2024-01-15T11:20:00",
+        "clinician": null,
+        "content_text": "Patient presents with persistent hemicranial throbbing headaches accompanied by photophobia and nausea for 3 weeks. Visual aura noted prior to episodes. Neurological exam reveals intact cranial nerves II-XII, symmetrical reflexes. Recommended MRI Brain with contrast.",
+        "encounter_id": null
+      }
+    ],
+    "diagnostic_reports": [
+      {
+        "id": "RPT-JSON-004",
+        "code": "30623-3",
+        "code_display": "MRI Brain with and without IV contrast",
+        "category": "RAD",
+        "effective_date": "01/18/2024",
+        "status": "FINAL",
+        "conclusion": "No acute intracranial hemorrhage, mass effect, or abnormal parenchymal enhancement. Mild scattered non-specific white matter microvascular changes.",
+        "results": {
+          "mass_effect": "negative",
+          "hemorrhage": "negative"
+        },
+        "encounter_id": null
+      }
+    ]
+  }
+]
+
