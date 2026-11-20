@@ -54,3 +54,4 @@ Summary quality was validated through a multi-dimensional clinical evaluation ru
    Asserted that every output contains mandatory confidence estimations and an explicit clinical disclaimer (*"AI-generated clinical synopsis. Not a substitute for professional clinical judgment."*).
 5. **Deterministic Idempotency**:
    Validated that repeated invocations for an unchanged patient dossier hit the SQLite hash cache (`patient_id + SHA256(records)`), delivering identical outputs with 0ms LLM latency and zero token expenditure.
+

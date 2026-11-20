@@ -92,3 +92,4 @@ def test_search_latency_benchmark_under_2_seconds():
     assert duration < 2.0, f"Search took {duration:.3f}s, exceeding 2.0s limit"
     assert response.latency_ms < 2000.0
     assert len(response.results) == 5
+

@@ -43,3 +43,4 @@ def test_api_pipeline_and_search():
     resp_ui = client.get("/")
     assert resp_ui.status_code == 200
     assert "Onye | EHR Media Intelligence Platform" in resp_ui.text
+

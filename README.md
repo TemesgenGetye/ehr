@@ -168,3 +168,4 @@ In accordance with assessment instructions (*"Clean commit history (one commit p
 3. `9a89496`: `feat(summarizer): Task 3 - AI clinical summarization engine, prompt engineering & SQLite cache`
 4. `4551fcb`: `feat(search): Task 4 - vector embeddings, ChromaDB indexing & FastAPI /search endpoint`
 5. `780afb4`: `feat(frontend): Task 5 - responsive clinician UI with real-time search, filters & patient drawer`
+

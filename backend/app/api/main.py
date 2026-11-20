@@ -165,3 +165,4 @@ def trigger_seed():
 frontend_dir = Path("frontend")
 if frontend_dir.exists():
     app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+

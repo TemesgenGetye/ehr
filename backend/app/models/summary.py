@@ -36,3 +36,4 @@ class ClinicalSummary(BaseModel):
     record_hash: str
     cache_hit: bool = False
     generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+

@@ -95,10 +95,13 @@ class SemanticSearchEngine:
     def _init_model(self):
         if HAS_SENTENCE_TRANSFORMERS:
             try:
-                # Attempt loading all-MiniLM-L6-v2
-                self.model = SentenceTransformer("all-MiniLM-L6-v2")
+                # First try loading from local cache to avoid network hang in sandbox
+                self.model = SentenceTransformer("all-MiniLM-L6-v2", local_files_only=True)
             except Exception:
-                self.model = None
+                try:
+                    self.model = SentenceTransformer("all-MiniLM-L6-v2")
+                except Exception:
+                    self.model = None
 
     def _init_store(self):
         self.chroma_client = None
@@ -258,3 +261,4 @@ class SemanticSearchEngine:
             latency_ms=round(latency_ms, 2),
             results=top_results,
         )
+

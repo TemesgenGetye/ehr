@@ -75,3 +75,4 @@ class SummaryCache:
                 ),
             )
             conn.commit()
+

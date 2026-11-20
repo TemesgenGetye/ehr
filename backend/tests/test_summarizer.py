@@ -68,3 +68,4 @@ def test_clinical_summarizer_and_caching(tmp_path):
     assert summary_2.cache_hit is True
     assert summary_2.record_hash == summary_1.record_hash
     assert summary_2.narrative_summary == summary_1.narrative_summary
+

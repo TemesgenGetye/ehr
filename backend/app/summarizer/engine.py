@@ -294,3 +294,4 @@ class ClinicalSummarizer:
             "narrative_summary": narrative,
             "confidence_score": 0.95,
         }
+

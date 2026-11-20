@@ -310,3 +310,4 @@ document.addEventListener('DOMContentLoaded', () => {
   searchInput.value = "acute abdominal pain and lab results";
   executeSearch();
 });
+
