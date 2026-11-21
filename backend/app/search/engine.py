@@ -118,6 +118,23 @@ class SemanticSearchEngine:
                     name="ehr_media_intelligence",
                     metadata={"hnsw:space": "cosine"},
                 )
+                if self.collection.count() > 0:
+                    try:
+                        existing = self.collection.get(include=["documents", "metadatas", "embeddings"])
+                        for doc_id, doc, meta, emb in zip(
+                            existing.get("ids", []),
+                            existing.get("documents", []),
+                            existing.get("metadatas", []),
+                            existing.get("embeddings", []),
+                        ):
+                            self.memory_store.append({
+                                "id": doc_id,
+                                "text": doc,
+                                "metadata": meta,
+                                "embedding": emb,
+                            })
+                    except Exception:
+                        pass
             except Exception:
                 self.chroma_client = None
                 self.collection = None
@@ -185,11 +202,43 @@ class SemanticSearchEngine:
         query_text = params.query.strip()
 
         if not query_text:
+            # If no query provided, return all matching filters sorted by date descending
+            scored_candidates: List[SearchResultItem] = []
+            for item in self.memory_store:
+                meta = item["metadata"]
+                if params.resource_type and params.resource_type.lower() != "all":
+                    if meta["resource_type"].lower() != params.resource_type.lower():
+                        continue
+                if params.date_from and meta["record_date"]:
+                    if meta["record_date"] < params.date_from:
+                        continue
+                if params.date_to and meta["record_date"]:
+                    if meta["record_date"] > params.date_to:
+                        continue
+
+                snippet = item["text"][:180] + ("..." if len(item["text"]) > 180 else "")
+                scored_candidates.append(
+                    SearchResultItem(
+                        patient_id=meta["patient_id"],
+                        patient_mrn=meta["patient_mrn"],
+                        patient_name=meta["patient_name"],
+                        record_id=item["id"],
+                        resource_type=meta["resource_type"],
+                        record_date=meta["record_date"],
+                        title=meta["title"],
+                        snippet=snippet,
+                        relevance_score=1.0,
+                        full_content=item["text"],
+                    )
+                )
+            scored_candidates.sort(key=lambda x: x.record_date, reverse=True)
+            top_results = scored_candidates[: params.limit]
+            latency_ms = (time.perf_counter() - start_time) * 1000.0
             return SearchResponse(
                 query="",
-                total_results=0,
-                latency_ms=0.0,
-                results=[],
+                total_results=len(top_results),
+                latency_ms=round(latency_ms, 2),
+                results=top_results,
             )
 
         query_embedding = self.embed_texts([query_text])[0]

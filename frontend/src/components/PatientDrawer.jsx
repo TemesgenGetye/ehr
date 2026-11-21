@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { 
   X, 
-  AlertOctagon, 
-  CheckCircle2, 
   Copy, 
   Check, 
   Sparkles, 
   FileText, 
   Activity, 
-  ShieldAlert, 
-  Calendar, 
-  User, 
-  Clock 
+  AlertCircle
 } from 'lucide-react';
 
 export default function PatientDrawer({ isOpen, onClose, dossier }) {
@@ -40,94 +35,95 @@ export default function PatientDrawer({ isOpen, onClose, dossier }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const initials = (patient.name || 'Patient')
+    .split(' ')
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
   return (
     <div
-      class="fixed inset-0 z-50 overflow-hidden"
+      className="fixed inset-0 z-50 overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-expanded={isOpen}
     >
       {/* Backdrop */}
       <div
-        class="absolute inset-0 bg-slate-950/50 backdrop-blur-xs transition-opacity"
+        className="absolute inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity"
         onClick={onClose}
       />
 
-      <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
-        <div class="w-screen max-w-2xl bg-white shadow-2xl flex flex-col border-l border-slate-200">
+      <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+        <div className="w-screen max-w-xl bg-white shadow-xl flex flex-col border-l border-slate-200">
           
-          {/* Top Dossier Header */}
-          <div class="px-6 py-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-            <div class="flex items-center space-x-3.5">
-              <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center shadow-md">
-                {patient.name.split(' ').map(p => p[0]).slice(0, 2).join('')}
+          {/* Top Header */}
+          <div className="px-6 py-4 bg-[#11131c] text-white flex items-center justify-between border-b border-slate-800">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 text-white font-bold text-xs flex items-center justify-center">
+                {initials}
               </div>
               <div>
-                <div class="flex items-center space-x-2">
-                  <h2 class="text-base font-black tracking-tight">{patient.name}</h2>
-                  <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-800 text-teal-300 border border-slate-700">
+                <div className="flex items-center space-x-2">
+                  <h2 className="text-sm font-bold tracking-tight text-white">{patient.name}</h2>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-800 text-slate-300 border border-slate-700">
                     {patient.mrn}
                   </span>
-                  {summary.cache_hit && (
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/10 text-teal-300 border border-teal-500/30 flex items-center">
-                      <Clock class="w-2.5 h-2.5 mr-1" />
-                      Cached (0ms)
-                    </span>
-                  )}
                 </div>
-                <p class="text-xs text-slate-400 mt-0.5">
-                  ID: {patient.id} • {patient.resource_count} Clinical Resources • Verified HL7 FHIR R4
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  HL7 FHIR R4 Patient Dossier
                 </p>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors"
+              className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
               aria-label="Close"
             >
-              <X class="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Navigation Tabs */}
-          <div class="border-b border-slate-200 px-6 flex space-x-6 text-xs font-bold uppercase tracking-wider bg-slate-50">
+          {/* Clean Minimal Tabs */}
+          <div className="border-b border-slate-200 px-6 flex space-x-6 text-xs font-semibold bg-slate-50">
             <button
               onClick={() => setActiveTab('summary')}
-              class={`py-3.5 border-b-2 transition-colors flex items-center space-x-1.5 ${
+              className={`py-3 border-b-2 transition-colors flex items-center space-x-1.5 ${
                 activeTab === 'summary'
-                  ? 'border-teal-600 text-teal-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+                  ? 'border-slate-900 text-slate-900'
+                  : 'border-transparent text-slate-400 hover:text-slate-700'
               }`}
             >
-              <Sparkles class="w-3.5 h-3.5" />
-              <span>AI Clinical Summary</span>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI Summary</span>
             </button>
             <button
               onClick={() => setActiveTab('fhir')}
-              class={`py-3.5 border-b-2 transition-colors flex items-center space-x-1.5 ${
+              className={`py-3 border-b-2 transition-colors flex items-center space-x-1.5 ${
                 activeTab === 'fhir'
-                  ? 'border-teal-600 text-teal-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+                  ? 'border-slate-900 text-slate-900'
+                  : 'border-transparent text-slate-400 hover:text-slate-700'
               }`}
             >
-              <FileText class="w-3.5 h-3.5" />
-              <span>FHIR R4 Bundle</span>
+              <FileText className="w-3.5 h-3.5" />
+              <span>FHIR R4</span>
             </button>
           </div>
 
-          {/* Tab Panels */}
-          <div class="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* Content Body */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-5">
             {activeTab === 'summary' ? (
-              <div class="space-y-5">
-                {/* Critical Anomalies Card */}
+              <div className="space-y-4">
+                {/* Critical Alerts (if any) */}
                 {hasAnomalies && (
-                  <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-xl shadow-xs">
-                    <h4 class="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center">
-                      <AlertOctagon class="w-4 h-4 mr-1.5 text-rose-600" />
-                      Critical Clinical Anomalies Flagged
-                    </h4>
-                    <ul class="mt-2 text-xs text-rose-900 font-medium space-y-1.5 list-disc list-inside">
+                  <div className="bg-rose-50 border border-rose-200/80 p-3.5 rounded-xl">
+                    <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider flex items-center mb-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 mr-1 text-rose-600" />
+                      Critical Flagged Anomalies
+                    </span>
+                    <ul className="text-xs text-rose-900 space-y-1 list-disc list-inside">
                       {summary.flagged_anomalies.map((a, i) => (
                         <li key={i}>{a}</li>
                       ))}
@@ -135,84 +131,84 @@ export default function PatientDrawer({ isOpen, onClose, dossier }) {
                   </div>
                 )}
 
-                {/* Chief Concern & Key Diagnoses */}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Chief Concern
-                    </span>
-                    <p class="text-xs font-bold text-slate-900 mt-1.5 leading-snug">
-                      {summary.chief_concern}
-                    </p>
-                  </div>
+                {/* Chief Concern */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Chief Concern
+                  </span>
+                  <p className="text-xs font-semibold text-slate-800 mt-1 leading-snug">
+                    {summary.chief_concern}
+                  </p>
+                </div>
 
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Key Diagnoses
-                    </span>
-                    <div class="flex flex-wrap gap-1.5 mt-2">
-                      {summary.key_diagnoses.map((d, i) => (
-                        <span
-                          key={i}
-                          class="px-2.5 py-0.5 bg-slate-200/90 text-slate-800 text-[11px] font-semibold rounded-full"
-                        >
-                          {d}
-                        </span>
-                      ))}
-                    </div>
+                {/* Key Diagnoses */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Key Diagnoses
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {summary.key_diagnoses.map((d, i) => (
+                      <span
+                        key={i}
+                        className="px-2.5 py-0.5 bg-white text-slate-800 text-[11px] font-medium rounded-full border border-slate-200"
+                      >
+                        {d}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Clinical Narrative (<200 words) */}
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-                  <div class="flex items-center justify-between mb-2 pb-2 border-b border-slate-100">
-                    <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center">
-                      <FileText class="w-3.5 h-3.5 mr-1.5 text-teal-600" />
-                      Clinical Synopsis
+                {/* Narrative Summary */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200/80">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      Narrative Summary
                     </span>
-                    <span class="text-[10.5px] font-mono px-2 py-0.5 rounded bg-teal-50 text-teal-700 font-bold border border-teal-200/60">
-                      {summary.word_count} / 200 words
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {summary.word_count} words
                     </span>
                   </div>
-                  <p class="text-xs text-slate-700 leading-relaxed font-sans mt-2">
+                  <p className="text-xs text-slate-700 leading-relaxed">
                     {summary.narrative_summary}
                   </p>
                 </div>
 
-                {/* Recent Media Records */}
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">
-                    Recent Tests & Diagnostic Media
+                {/* Recent Tests */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                    Recent Tests & Media
                   </span>
-                  <div class="space-y-2">
+                  <div className="space-y-1.5">
                     {summary.recent_media_records.map((m, i) => (
-                      <div key={i} class="flex items-center space-x-2 text-xs font-semibold text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200/60 shadow-2xs">
-                        <Activity class="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                      <div
+                        key={i}
+                        className="flex items-center space-x-2 text-xs font-medium text-slate-800 bg-white p-2 rounded-lg border border-slate-200/60"
+                      >
+                        <Activity className="w-3 h-3 text-slate-400 shrink-0" />
                         <span>{m}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Clinical Safety Disclaimer */}
-                <div class="p-3 bg-slate-100 rounded-xl text-[11px] text-slate-500 border border-slate-200 italic flex items-start space-x-2">
-                  <ShieldAlert class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <span>{summary.disclaimer}</span>
-                </div>
+                {/* Mandatory Clinical Disclaimer */}
+                <p className="text-[11px] text-slate-400 italic pt-1">
+                  {summary.disclaimer}
+                </p>
               </div>
             ) : (
-              <div class="space-y-4">
-                <div class="flex items-center justify-between bg-slate-100 p-3 rounded-xl border border-slate-200 text-xs font-mono">
-                  <span class="font-bold text-slate-700">Resources: {bundle.entry ? bundle.entry.length : 0}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-500 pb-1">
+                  <span>{bundle.entry ? bundle.entry.length : 0} FHIR Resources</span>
                   <button
                     onClick={handleCopy}
-                    class="flex items-center space-x-1.5 text-xs text-teal-700 hover:text-teal-900 bg-white border border-slate-300 px-3 py-1.5 rounded-lg font-bold shadow-2xs hover:bg-teal-50 transition-colors"
+                    className="flex items-center space-x-1 text-xs text-slate-700 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-md font-medium transition-colors"
                   >
-                    {copied ? <Check class="w-3.5 h-3.5 text-emerald-600" /> : <Copy class="w-3.5 h-3.5" />}
-                    <span>{copied ? 'Copied!' : 'Copy FHIR JSON'}</span>
+                    {copied ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    <span>{copied ? 'Copied' : 'Copy JSON'}</span>
                   </button>
                 </div>
-                <pre class="p-4 bg-slate-950 text-teal-300 font-mono text-[11px] leading-tight rounded-xl overflow-x-auto max-h-[520px] border border-slate-800">
+                <pre className="p-3.5 bg-slate-900 text-slate-200 font-mono text-[11px] leading-relaxed rounded-xl overflow-x-auto max-h-[500px] border border-slate-800">
                   {JSON.stringify(bundle, null, 2)}
                 </pre>
               </div>

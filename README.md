@@ -169,3 +169,4 @@ In accordance with assessment instructions (*"Clean commit history (one commit p
 4. `4551fcb`: `feat(search): Task 4 - vector embeddings, ChromaDB indexing & FastAPI /search endpoint`
 5. `780afb4`: `feat(frontend): Task 5 - responsive clinician UI with real-time search, filters & patient drawer`
 
+# ehr

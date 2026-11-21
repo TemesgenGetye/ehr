@@ -7,7 +7,10 @@ import os
 import re
 from typing import Any, Dict, List, Optional
 import httpx
+from dotenv import load_dotenv
 from fhir.resources.bundle import Bundle
+
+load_dotenv()
 
 from backend.app.models.summary import ClinicalSummary
 from backend.app.summarizer.cache import SummaryCache
@@ -26,6 +29,7 @@ class ClinicalSummarizer:
 
     def __init__(self, cache: Optional[SummaryCache] = None):
         self.cache = cache or SummaryCache()
+        self.gemini_api_key = os.getenv("GEMINI_API_KEY")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
 
@@ -92,10 +96,22 @@ class ClinicalSummarizer:
                 for c in getattr(res, "content", []):
                     att = getattr(c, "attachment", None)
                     if att and att.data:
-                        try:
-                            body = base64.b64decode(att.data).decode("utf-8")
-                        except Exception:
-                            body = str(att.data)
+                        raw = att.data
+                        if isinstance(raw, bytes):
+                            try:
+                                body = raw.decode("utf-8")
+                            except Exception:
+                                try:
+                                    body = base64.b64decode(raw).decode("utf-8")
+                                except Exception:
+                                    body = str(raw)
+                        elif isinstance(raw, str):
+                            try:
+                                body = base64.b64decode(raw).decode("utf-8")
+                            except Exception:
+                                body = raw
+                        else:
+                            body = str(raw)
                 docs_text.append(f"- [{date_str}] {title}: {body}")
 
             elif r_type == "DiagnosticReport":
@@ -158,6 +174,12 @@ class ClinicalSummarizer:
 
     def _invoke_llm_or_fallback(self, details: Dict[str, Any]) -> Dict[str, Any]:
         """Attempts live LLM API call if keys configured, else high-fidelity clinical parser."""
+        if self.gemini_api_key:
+            try:
+                return self._call_gemini(details)
+            except Exception as e:
+                print(f"[Summarizer] Gemini API failed, falling back: {e}")
+
         if self.anthropic_api_key:
             try:
                 return self._call_anthropic(details)
@@ -171,6 +193,27 @@ class ClinicalSummarizer:
                 print(f"[Summarizer] OpenAI API failed, falling back: {e}")
 
         return self._clinical_rule_based_summary(details)
+
+    def _call_gemini(self, details: Dict[str, Any]) -> Dict[str, Any]:
+        prompt = (
+            f"{CLINICAL_SUMMARY_SYSTEM_PROMPT}\n\n"
+            + CLINICAL_SUMMARY_USER_TEMPLATE.format(**details)
+        )
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={self.gemini_api_key}"
+        headers = {"Content-Type": "application/json"}
+        body = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {
+                "response_mime_type": "application/json",
+                "temperature": 0.2,
+            },
+        }
+        with httpx.Client(timeout=15.0) as client:
+            resp = client.post(url, headers=headers, json=body)
+            resp.raise_for_status()
+            res_json = resp.json()
+            raw_text = res_json["candidates"][0]["content"]["parts"][0]["text"]
+            return json.loads(raw_text)
 
     def _call_anthropic(self, details: Dict[str, Any]) -> Dict[str, Any]:
         prompt = CLINICAL_SUMMARY_USER_TEMPLATE.format(**details)
