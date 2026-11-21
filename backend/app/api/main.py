@@ -158,6 +158,17 @@ def get_patient_dossier(patient_id: str):
     }
 
 
+@app.post("/patients/{patient_id}/summarize")
+def generate_patient_summary(patient_id: str):
+    bundle_data = fhir_store.get_bundle(patient_id)
+    if not bundle_data:
+        raise HTTPException(status_code=404, detail="Patient record not found")
+
+    from fhir.resources.bundle import Bundle
+    bundle = Bundle.model_validate(bundle_data["bundle"])
+    return summarizer.summarize_bundle(bundle, bypass_cache=True)
+
+
 @app.post("/pipeline/seed")
 def trigger_seed():
     """Manually re-run the ingestion, normalization, and indexing pipeline."""

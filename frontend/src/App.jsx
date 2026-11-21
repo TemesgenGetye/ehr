@@ -24,6 +24,7 @@ export default function App() {
   // Patient Dossier Drawer
   const [dossier, setDossier] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
 
   const debounceTimerRef = useRef(null);
 
@@ -134,6 +135,21 @@ export default function App() {
       setIsDrawerOpen(true);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleRegenerateSummary = async (patientId) => {
+    setIsGeneratingSummary(true);
+    try {
+      const res = await fetch(`/patients/${patientId}/summarize`, { method: 'POST' });
+      if (res.ok) {
+        const freshSummary = await res.json();
+        setDossier((prev) => (prev ? { ...prev, summary: freshSummary } : prev));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsGeneratingSummary(false);
     }
   };
 
@@ -269,6 +285,8 @@ export default function App() {
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         dossier={dossier}
+        onRegenerateSummary={handleRegenerateSummary}
+        isGeneratingSummary={isGeneratingSummary}
       />
     </div>
   );

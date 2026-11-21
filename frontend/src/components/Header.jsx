@@ -5,9 +5,7 @@ import {
   CheckCircle2, 
   AlertCircle, 
   User, 
-  RefreshCw,
-  Bell,
-  Search
+  RefreshCw 
 } from 'lucide-react';
 
 export default function Header({ 
@@ -28,9 +26,7 @@ export default function Header({
   return (
     <header className="bg-[#11131c] text-white pt-4 pb-7 px-6 sm:px-8 border-b border-slate-800/80">
       <div className="max-w-7xl mx-auto">
-        {/* Top Navbar */}
         <div className="flex items-center justify-between pb-5 border-b border-slate-800/60">
-          {/* Logo & Brand */}
           <div className="flex items-center space-x-2.5">
             <div className="w-7 h-7 rounded-full bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 font-bold text-xs">
               ❖
@@ -39,17 +35,6 @@ export default function Header({
             <span className="text-[11px] text-slate-400 font-normal ml-1">EHR Intelligence</span>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-6 text-xs font-medium text-slate-400">
-            <a href="#dashboard" className="hover:text-white transition-colors">Dashboard</a>
-            <a href="#patients" className="hover:text-white transition-colors">Patients</a>
-            <span className="text-white font-semibold px-3 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/60">
-              Clinical Media
-            </span>
-            <a href="#fhir" className="hover:text-white transition-colors">FHIR Store</a>
-          </nav>
-
-          {/* Right Controls */}
           <div className="flex items-center space-x-2.5">
             <button
               onClick={onReseed}
@@ -60,17 +45,15 @@ export default function Header({
               <RefreshCw className={`w-3 h-3 ${isReseeding ? 'animate-spin text-indigo-400' : ''}`} />
               <span className="text-[11px] font-medium">{isReseeding ? 'Syncing...' : 'Sync Data'}</span>
             </button>
-            <div className="w-8 h-8 rounded-full bg-slate-800/90 border border-slate-700/60 flex items-center justify-center text-slate-300 cursor-pointer hover:bg-slate-700 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-800/90 border border-slate-700/60 flex items-center justify-center text-slate-300">
               <User className="w-3.5 h-3.5" />
             </div>
           </div>
         </div>
 
-        {/* Hero Title & Stat Cards */}
         <div className="pt-5">
           <h1 className="text-xl font-bold tracking-tight text-white mb-4">Clinical Media</h1>
 
-          {/* 4 Clean Metric Cards matching template */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {cards.map((c, i) => {
               const Icon = c.icon;

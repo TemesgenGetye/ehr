@@ -130,18 +130,15 @@ class ClinicalSummarizer:
             "reports_text": "\n".join(reports_text) if reports_text else "No diagnostic reports available.",
         }
 
-    def summarize_bundle(self, bundle: Bundle) -> ClinicalSummary:
-        """
-        Generate or fetch cached clinical summary for a patient's FHIR Bundle.
-        """
+    def summarize_bundle(self, bundle: Bundle, bypass_cache: bool = False) -> ClinicalSummary:
         details = self.extract_bundle_details(bundle)
         patient_id = details["patient_id"]
         record_hash = self.compute_record_hash(bundle)
 
-        # 1. Check cache
-        cached = self.cache.get(patient_id, record_hash)
-        if cached:
-            return cached
+        if not bypass_cache:
+            cached = self.cache.get(patient_id, record_hash)
+            if cached:
+                return cached
 
         # 2. Generate summary via LLM or intelligent deterministic engine
         summary_payload = self._invoke_llm_or_fallback(details)
