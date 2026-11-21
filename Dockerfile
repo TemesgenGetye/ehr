@@ -22,3 +22,4 @@ COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 EXPOSE 8000
 
 CMD ["python", "-m", "backend.app.api.main"]
+
