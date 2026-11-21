@@ -1,17 +1,17 @@
 import React from 'react';
-import { 
-  FileText, 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle, 
-  User, 
-  RefreshCw 
+import {
+  FileText,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  User,
+  RefreshCw
 } from 'lucide-react';
 
-export default function Header({ 
-  totalRecords = 18, 
-  inReviewCount = 2, 
-  completedCount = 7, 
+export default function Header({
+  totalRecords = 18,
+  inReviewCount = 2,
+  completedCount = 7,
   flaggedCount = 3,
   onReseed,
   isReseeding
@@ -32,7 +32,6 @@ export default function Header({
               ❖
             </div>
             <span className="font-semibold text-sm tracking-tight text-white">onye</span>
-            <span className="text-[11px] text-slate-400 font-normal ml-1">EHR Intelligence</span>
           </div>
 
           <div className="flex items-center space-x-2.5">

@@ -3,7 +3,7 @@ import Header from './components/Header.jsx';
 import FilterSidebar from './components/FilterSidebar.jsx';
 import PatientCard from './components/PatientCard.jsx';
 import PatientDrawer from './components/PatientDrawer.jsx';
-import { Search, Zap, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 export default function App() {
   const [query, setQuery] = useState('');
@@ -211,12 +211,6 @@ export default function App() {
               >
                 <X className="w-3.5 h-3.5" />
               </button>
-            )}
-            {latencyMs !== null && (
-              <div className="hidden sm:flex items-center space-x-1 text-[11px] font-mono text-slate-400 border-l border-slate-200 pl-3 shrink-0">
-                <Zap className="w-3 h-3 text-emerald-500" />
-                <span>{latencyMs}ms</span>
-              </div>
             )}
           </div>
 
