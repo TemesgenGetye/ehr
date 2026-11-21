@@ -11,9 +11,9 @@
 * **Embedded Vector Store (ChromaDB + SQLite) vs. Distributed Search (Elasticsearch / Milvus)**:
   * *Decision*: Utilized ChromaDB in combination with a dual-layer SQLite store for FHIR Bundles and summary caching.
   * *Rationale*: For an edge-compatible or single-node clinical media intelligence tool handling thousands of patient files, embedded SQLite and ChromaDB offer sub-50ms query latencies without the operational footprint or maintenance complexity of a distributed Java or cloud cluster.
-* **Lightweight Modern Tailwind UI vs. Heavy SPA Framework (Next.js / Angular)**:
-  * *Decision*: Built a responsive, accessible clinician workspace using Tailwind CSS and modern JavaScript served directly through FastAPI's static mount.
-  * *Rationale*: Avoided multi-stage frontend compilation, Node.js runtime build steps, and cross-origin CORS latency. Clinicians receive instant page loads, and evaluators can launch the entire stack with a single command (`uvicorn`).
+* **Modern React + Tailwind CSS Workstation vs. Heavy Multi-App Monolith**:
+  * *Decision*: Built a responsive, accessible clinician workspace using React 18, Vite, and Tailwind CSS.
+  * *Rationale*: Utilizing Vite with React 18 provides component modularity (reusable `ResultCard`, `PatientDrawer`, `SearchBar`), predictable reactive state management for real-time search, and sub-second production builds mounted directly via FastAPI. This guarantees instant load times for clinicians while maintaining seamless single-command (`uvicorn`) evaluation.
 
 ---
 

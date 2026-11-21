@@ -94,7 +94,7 @@ flowchart TD
 * **Performance Benchmark**: Benchmarked at **< 100ms** latency (surpassing the < 2.0s requirement for 50 records).
 
 ### Task 5: Clinician Search & Summary UI
-* **Design**: Modern clinician workstation built with **Tailwind CSS**.
+* **Design**: Modern clinician workstation built with **React 18** and **Tailwind CSS** (via Vite).
 * **Features**:
   * Real-time search bar querying `POST /search`.
   * Faceted filters for resource types and date ranges.
@@ -120,7 +120,7 @@ flowchart TD
 │   │   ├── raw/             # Synthetic dirty datasets (JSON and CSV)
 │   │   └── processed/       # SQLite databases (fhir_store.db, summary_cache.db)
 │   └── tests/               # Pytest suite (Ingestion, FHIR, Summarizer, Search, API)
-├── frontend/                # Task 5: Clinician UI (HTML5, Tailwind CSS, Vanilla JS)
+├── frontend/                # Task 5: Clinician UI (React 18, Vite, Tailwind CSS)
 ├── docs/                    # 1-Page Technical Write-up
 ├── requirements.txt
 ├── pytest.ini

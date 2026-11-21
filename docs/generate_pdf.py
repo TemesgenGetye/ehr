@@ -87,7 +87,7 @@ def generate_pdf():
         bullet_style
     ))
     story.append(Paragraph(
-        "• <b>Lightweight Modern Tailwind UI vs. Heavy Frameworks:</b> Paired Tailwind CSS with responsive ES6+ client logic mounted directly via FastAPI instead of a multi-stage Node/Next.js compilation pipeline. This eliminates CORS overhead, guarantees instant load times, and allows evaluators to launch the full stack with a single command (<code>uvicorn</code>).",
+        "• <b>Modern React 18 & Tailwind UI vs. Monolithic Frameworks:</b> Paired React 18 and Vite with Tailwind CSS to deliver reactive state management, modular components (SearchBar, ResultCard, PatientDrawer), and sub-second production builds mounted directly via FastAPI. This guarantees instant load times and single-command (<code>uvicorn</code>) evaluation.",
         bullet_style
     ))
 
@@ -145,3 +145,4 @@ def generate_pdf():
 
 if __name__ == '__main__':
     generate_pdf()
+

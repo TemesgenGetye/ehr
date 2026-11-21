@@ -162,7 +162,10 @@ def trigger_seed():
     return {"status": "success", "indexed_records": len(search_engine.memory_store)}
 
 
+frontend_dist = Path("frontend/dist")
 frontend_dir = Path("frontend")
-if frontend_dir.exists():
-    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+if frontend_dist.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="frontend")
+elif frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
