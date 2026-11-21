@@ -16,11 +16,15 @@ try:
 except ImportError:
     HAS_CHROMADB = False
 
-try:
-    from sentence_transformers import SentenceTransformer
-    HAS_SENTENCE_TRANSFORMERS = True
-except ImportError:
-    HAS_SENTENCE_TRANSFORMERS = False
+HAS_SENTENCE_TRANSFORMERS = False
+SentenceTransformer = None
+
+if os.getenv("USE_LIGHTWEIGHT_EMBEDDINGS") != "1":
+    try:
+        from sentence_transformers import SentenceTransformer
+        HAS_SENTENCE_TRANSFORMERS = True
+    except ImportError:
+        HAS_SENTENCE_TRANSFORMERS = False
 
 
 class SearchQuery(BaseModel):
