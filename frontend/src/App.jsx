@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from './components/Header.jsx';
 import FilterSidebar from './components/FilterSidebar.jsx';
 import PatientCard from './components/PatientCard.jsx';
@@ -8,8 +8,6 @@ import { Search, Zap, X } from 'lucide-react';
 export default function App() {
   const [query, setQuery] = useState('');
   const [resourceType, setResourceType] = useState('');
-  const [dateFilter, setDateFilter] = useState('recent');
-  const [compactView, setCompactView] = useState(false);
 
   const [results, setResults] = useState([]);
   const [totalMatches, setTotalMatches] = useState(0);
@@ -27,19 +25,7 @@ export default function App() {
   const [dossier, setDossier] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Calculate ISO date string based on date filter
-  const getDateRange = useCallback((filter) => {
-    const now = new Date();
-    if (filter === '24h') {
-      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      return { from: yesterday.toISOString().slice(0, 10), to: null };
-    }
-    if (filter === '7d') {
-      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      return { from: weekAgo.toISOString().slice(0, 10), to: null };
-    }
-    return { from: null, to: null };
-  }, []);
+  const debounceTimerRef = useRef(null);
 
   // Fetch initial patient stats
   const fetchStats = useCallback(async () => {
@@ -57,9 +43,8 @@ export default function App() {
   }, []);
 
   const executeSearch = useCallback(
-    async (q = query, type = resourceType, dFilter = dateFilter) => {
+    async (q = query, type = resourceType) => {
       setIsLoading(true);
-      const { from, to } = getDateRange(dFilter);
 
       try {
         const res = await fetch('/search', {
@@ -68,9 +53,7 @@ export default function App() {
           body: JSON.stringify({
             query: q || '',
             resource_type: type || null,
-            date_from: from,
-            date_to: to,
-            limit: 24,
+            limit: 30,
           }),
         });
 
@@ -100,36 +83,46 @@ export default function App() {
         setIsLoading(false);
       }
     },
-    [query, resourceType, dateFilter, getDateRange]
+    [query, resourceType]
   );
 
+  // Trigger search on mount
   useEffect(() => {
     fetchStats();
-    executeSearch('', '', 'recent');
+    executeSearch('', '');
   }, []);
 
+  // Debounced search on query change
   const handleQueryChange = (e) => {
     const val = e.target.value;
     setQuery(val);
-    executeSearch(val, resourceType, dateFilter);
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      executeSearch(val, resourceType);
+    }, 250);
+  };
+
+  const handleClearQuery = () => {
+    setQuery('');
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    executeSearch('', resourceType);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      executeSearch(query, resourceType);
+    }
   };
 
   const handleResourceTypeChange = (newType) => {
-    const updated = resourceType === newType ? '' : newType;
-    setResourceType(updated);
-    executeSearch(query, updated, dateFilter);
-  };
-
-  const handleDateFilterChange = (newDateFilter) => {
-    setDateFilter(newDateFilter);
-    executeSearch(query, resourceType, newDateFilter);
-  };
-
-  const handleResetFilters = () => {
-    setResourceType('');
-    setDateFilter('recent');
-    setQuery('');
-    executeSearch('', '', 'recent');
+    setResourceType(newType);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    executeSearch(query, newType);
   };
 
   const handleOpenDossier = async (patientId) => {
@@ -150,7 +143,7 @@ export default function App() {
       const res = await fetch('/pipeline/seed', { method: 'POST' });
       if (res.ok) {
         await fetchStats();
-        executeSearch();
+        executeSearch(query, resourceType);
       }
     } catch (err) {
       console.error(err);
@@ -178,11 +171,6 @@ export default function App() {
         <FilterSidebar
           resourceType={resourceType}
           setResourceType={handleResourceTypeChange}
-          dateFilter={dateFilter}
-          setDateFilter={handleDateFilterChange}
-          compactView={compactView}
-          setCompactView={setCompactView}
-          onReset={handleResetFilters}
         />
 
         {/* Right Content Area */}
@@ -195,15 +183,13 @@ export default function App() {
               type="text"
               value={query}
               onChange={handleQueryChange}
-              placeholder="Search records, symptoms, conditions, or MRN..."
+              onKeyDown={handleKeyDown}
+              placeholder="Search by patient name, MRN, symptom, diagnosis, or condition..."
               className="w-full bg-transparent border-none text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
             />
             {query && (
               <button
-                onClick={() => {
-                  setQuery('');
-                  executeSearch('', resourceType, dateFilter);
-                }}
+                onClick={handleClearQuery}
                 className="text-slate-400 hover:text-slate-600 p-1 mr-1"
                 title="Clear search"
               >
@@ -218,20 +204,25 @@ export default function App() {
             )}
           </div>
 
-          {/* Results Counter */}
+          {/* Results Summary */}
           <div className="flex items-center justify-between text-xs text-slate-500">
             <span>
-              Showing <strong className="text-slate-900">{results.length}</strong> clinical dossiers
+              Showing <strong className="text-slate-900">{results.length}</strong> records
+              {resourceType && (
+                <span className="ml-1 text-slate-400">
+                  in category <strong className="text-slate-700">{resourceType}</strong>
+                </span>
+              )}
             </span>
           </div>
 
-          {/* Loading Skeleton State */}
+          {/* Loading Skeleton */}
           {isLoading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <div key={n} className="bg-white rounded-2xl border border-slate-100 p-5 space-y-4 animate-pulse">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100" />
+                    <div className="w-9 h-9 rounded-full bg-slate-100" />
                     <div className="space-y-1.5 flex-1">
                       <div className="h-3.5 bg-slate-100 rounded w-1/2" />
                       <div className="h-2.5 bg-slate-100 rounded w-1/3" />
@@ -252,12 +243,12 @@ export default function App() {
               </div>
               <h3 className="text-xs font-bold text-slate-800">No records found</h3>
               <p className="text-[11px] text-slate-400 mt-1">
-                Try searching for symptoms like 'chest pain', conditions like 'appendicitis', or clear filters.
+                Try searching for a patient name like "Marcus", symptoms like "chest pain", or clear filters.
               </p>
             </div>
           )}
 
-          {/* Clean Patient Cards Grid matching template */}
+          {/* Clean Patient Cards Grid */}
           {!isLoading && results.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {results.map((item) => (
@@ -265,7 +256,6 @@ export default function App() {
                   key={item.record_id}
                   item={item}
                   onOpenDossier={handleOpenDossier}
-                  compactView={compactView}
                 />
               ))}
             </div>

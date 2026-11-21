@@ -79,6 +79,22 @@ class FallbackEmbeddingGenerator:
         return embeddings
 
 
+def _matches_resource_type(target_type: str, query_type: Optional[str]) -> bool:
+    if not query_type or query_type.lower() in ("all", ""):
+        return True
+    qt = query_type.lower().strip()
+    tt = target_type.lower().strip()
+    if qt == tt:
+        return True
+    if qt in ("notes", "clinical notes", "clinicalnote", "documentreference") and tt == "documentreference":
+        return True
+    if qt in ("labs", "reports", "diagnosticreport", "diagnostics", "diagnostic") and tt == "diagnosticreport":
+        return True
+    if qt in ("summaries", "ai summaries", "summary", "clinicalsummary") and tt == "clinicalsummary":
+        return True
+    return False
+
+
 class SemanticSearchEngine:
     """
     Lightweight, high-performance semantic search engine for EHR records.
@@ -206,17 +222,17 @@ class SemanticSearchEngine:
             scored_candidates: List[SearchResultItem] = []
             for item in self.memory_store:
                 meta = item["metadata"]
-                if params.resource_type and params.resource_type.lower() != "all":
-                    if meta["resource_type"].lower() != params.resource_type.lower():
-                        continue
-                if params.date_from and meta["record_date"]:
-                    if meta["record_date"] < params.date_from:
-                        continue
-                if params.date_to and meta["record_date"]:
-                    if meta["record_date"] > params.date_to:
-                        continue
+                if not _matches_resource_type(meta["resource_type"], params.resource_type):
+                    continue
+                if params.date_from and meta["record_date"] and meta["record_date"] < params.date_from:
+                    continue
+                if params.date_to and meta["record_date"] and meta["record_date"] > params.date_to:
+                    continue
 
-                snippet = item["text"][:180] + ("..." if len(item["text"]) > 180 else "")
+                raw_text = item["text"]
+                clean_text = raw_text.split(" | ")[-1] if " | " in raw_text else raw_text
+                snippet = clean_text[:170] + ("..." if len(clean_text) > 170 else "")
+
                 scored_candidates.append(
                     SearchResultItem(
                         patient_id=meta["patient_id"],
@@ -249,19 +265,13 @@ class SemanticSearchEngine:
             meta = item["metadata"]
 
             # Filter: resource_type
-            if params.resource_type and params.resource_type.lower() != "all":
-                if meta["resource_type"].lower() != params.resource_type.lower():
-                    continue
+            if not _matches_resource_type(meta["resource_type"], params.resource_type):
+                continue
 
-            # Filter: date_from
-            if params.date_from and meta["record_date"]:
-                if meta["record_date"] < params.date_from:
-                    continue
-
-            # Filter: date_to
-            if params.date_to and meta["record_date"]:
-                if meta["record_date"] > params.date_to:
-                    continue
+            if params.date_from and meta["record_date"] and meta["record_date"] < params.date_from:
+                continue
+            if params.date_to and meta["record_date"] and meta["record_date"] > params.date_to:
+                continue
 
             # Calculate cosine similarity
             emb1 = item["embedding"]
@@ -271,17 +281,26 @@ class SemanticSearchEngine:
             norm2 = math.sqrt(sum(b * b for b in emb2)) or 1.0
             cosine_score = dot / (norm1 * norm2)
 
-            # Keyword lexical boost if exact match occurs
+            # Keyword lexical boost if exact match on patient name, MRN, title, or body occurs
             lexical_boost = 0.0
             q_lower = query_text.lower()
             text_lower = item["text"].lower()
-            if q_lower in text_lower or any(word in text_lower for word in q_lower.split() if len(word) > 3):
+            name_lower = meta.get("patient_name", "").lower()
+            mrn_lower = meta.get("patient_mrn", "").lower()
+            title_lower = meta.get("title", "").lower()
+
+            if q_lower in name_lower or q_lower in mrn_lower:
+                lexical_boost = 0.50
+            elif q_lower in title_lower or q_lower in text_lower:
+                lexical_boost = 0.30
+            elif any(word in name_lower or word in mrn_lower or word in title_lower or word in text_lower for word in q_lower.split() if len(word) >= 3):
                 lexical_boost = 0.15
 
             relevance = min(1.0, max(0.0, (cosine_score + lexical_boost)))
 
-            # Create clean snippet
-            snippet = item["text"][:180] + ("..." if len(item["text"]) > 180 else "")
+            raw_text = item["text"]
+            clean_text = raw_text.split(" | ")[-1] if " | " in raw_text else raw_text
+            snippet = clean_text[:170] + ("..." if len(clean_text) > 170 else "")
 
             scored_candidates.append(
                 SearchResultItem(

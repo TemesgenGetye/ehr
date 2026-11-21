@@ -71,7 +71,7 @@ def run_seed_pipeline():
         for d in docs:
             search_engine.index_record(
                 doc_id=d.id,
-                text_content=f"{d.title}: {d.content_text}",
+                text_content=f"Patient: {patient.full_name} | MRN: {patient.mrn} | {d.title}: {d.content_text}",
                 patient_id=patient.id,
                 patient_mrn=patient.mrn,
                 patient_name=patient.full_name,
@@ -84,7 +84,7 @@ def run_seed_pipeline():
         for r in rpts:
             search_engine.index_record(
                 doc_id=r.id,
-                text_content=f"{r.code_display} ({r.category}): {r.conclusion}",
+                text_content=f"Patient: {patient.full_name} | MRN: {patient.mrn} | {r.code_display} ({r.category}): {r.conclusion}",
                 patient_id=patient.id,
                 patient_mrn=patient.mrn,
                 patient_name=patient.full_name,
