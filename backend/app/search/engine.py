@@ -63,7 +63,7 @@ class FallbackEmbeddingGenerator:
     Deterministic semantic vector generator for offline / sandboxed environments.
     Guarantees sub-millisecond embeddings and consistent cosine similarity.
     """
-    DIM = 128
+    DIM = 384
 
     @classmethod
     def encode(cls, texts: List[str]) -> List[List[float]]:
@@ -109,6 +109,10 @@ class SemanticSearchEngine:
         self._init_store()
 
     def _init_model(self):
+        if os.getenv("USE_LIGHTWEIGHT_EMBEDDINGS") == "1":
+            self.model = None
+            return
+
         if HAS_SENTENCE_TRANSFORMERS:
             try:
                 # First try loading from local cache to avoid network hang in sandbox
