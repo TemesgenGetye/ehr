@@ -1,182 +1,192 @@
 [
   {
-    "patient_id": "P-101",
+    "patient_id": "PAT-101",
     "mrn": " mrn-1001-a ",
-    "full_name": "Johnathan Smith",
-    "birth_date": "05/14/1980",
+    "full_name": "Marcus Vance",
+    "birth_date": "05/14/1968",
     "gender": "M",
-    "phone": " (555) 234-5678 ",
-    "email": "J.SMITH@EXAMPLE.COM",
+    "phone": "(555) 234-5678",
+    "email": "m.vance@healthnet.org",
     "documents": [
       {
-        "id": "DOC-JSON-001",
-        "title": "Initial Emergency Department Consultation",
+        "id": "DOC-101",
+        "title": "Emergency Department Admission Note",
         "category": "clinical-note",
-        "date": "10/12/2023 14:30:00",
-        "clinician": null,
-        "content_text": "Patient presents with acute subretinal and epigastric discomfort radiating to left scapula. Past medical history includes hypertension and type 2 diabetes mellitus. Blood pressure 148/92 mmHg, pulse 88 bpm. EKG demonstrates non-specific ST segment abnormalities.",
-        "encounter_id": "ENC-001"
+        "date": "2023-10-12T14:30:00Z",
+        "clinician": "Dr. Elena Rostova, MD",
+        "content_text": "55yo male with hypertension and T2D presents with 2 hours of crushing substernal chest pressure radiating to left jaw, diaphoresis, and mild dyspnea. Initial BP 162/98 mmHg, HR 96 bpm. ECG reveals 2mm ST-elevation in leads V2-V4. Urgent cath lab activation initiated.",
+        "encounter_id": "ENC-101"
       }
     ],
     "diagnostic_reports": [
       {
-        "id": "RPT-JSON-001",
-        "code": "24357-6",
-        "code_display": "Urinalysis macro (dipstick) panel",
+        "id": "RPT-101",
+        "code": "10839-9",
+        "code_display": "High-Sensitivity Cardiac Troponin I",
         "category": "LAB",
-        "effective_date": "2023-10-12T16:00:00",
-        "status": "FINAL",
-        "conclusion": "Trace proteinuria detected, negative for leukocytes and nitrites.",
+        "effective_date": "2023-10-12T15:10:00Z",
+        "status": "final",
+        "conclusion": "Troponin I critically elevated at 1.82 ng/mL (reference < 0.04 ng/mL). Consistent with acute ST-elevation myocardial infarction.",
         "results": {
-          "protein": "trace",
-          "glucose": "negative",
-          "leukocytes": "negative"
+          "troponin_i": "1.82 ng/mL",
+          "ck_mb": "28.4 ng/mL"
         },
-        "encounter_id": "ENC-001"
+        "encounter_id": "ENC-101"
       }
     ]
   },
   {
-    "patient_id": "P-102",
+    "patient_id": "PAT-102",
     "mrn": "MRN1002B",
-    "full_name": "Emily Davis",
-    "birth_date": "1992.07.21",
+    "full_name": "Sophia Lin",
+    "birth_date": "1994.08.22",
     "gender": "Female",
-    "phone": "555-987-6543",
-    "email": "emily.davis@healthnet.org",
+    "phone": "555-876-5432",
+    "email": "sophia.lin@carefirst.org",
     "documents": [
       {
-        "id": "DOC-JSON-002",
-        "title": "Inpatient Discharge Summary",
+        "id": "DOC-102",
+        "title": "Pulmonology Inpatient Discharge Summary",
         "category": "discharge-summary",
-        "date": "2023-11-05",
+        "date": "2023-11-05T11:00:00Z",
         "clinician": "Dr. Sarah Chen, MD",
-        "content_text": "31-year-old female admitted for acute exacerbation of severe asthma. Responded favorably to systemic intravenous corticosteroid pulse therapy and bronchodilator nebulization. Peak expiratory flow improved from 210 L/min to 420 L/min. Discharged on fluticasone/salmeterol inhaler with outpatient pulmonology follow-up.",
-        "encounter_id": "ENC-002"
+        "content_text": "29yo female admitted for status asthmaticus refractory to home albuterol. Received IV methylprednisolone pulse, continuous nebulized bronchodilators, and supplemental oxygen. SpO2 normalized to 98% on ambient air. Discharged on fluticasone/salmeterol DPI.",
+        "encounter_id": "ENC-102"
       }
     ],
     "diagnostic_reports": [
       {
-        "id": "RPT-JSON-002",
+        "id": "RPT-102",
         "code": "24606-6",
-        "code_display": "Chest X-ray single view frontal",
+        "code_display": "Chest X-Ray Single View (Frontal)",
         "category": "RAD",
-        "effective_date": "11/04/2023 09:15",
+        "effective_date": "2023-11-04T09:15:00Z",
         "status": "final",
-        "conclusion": "Bilateral hyperinflation without focal consolidation, pneumothorax, or pleural effusion.",
+        "conclusion": "Bilateral pulmonary hyperinflation with flattened diaphragms. No focal consolidation, pneumothorax, or acute pleural effusion.",
         "results": {
           "hyperinflation": "present",
-          "consolidation": "none",
-          "pneumothorax": "none"
+          "consolidation": "negative"
         },
-        "encounter_id": "ENC-002"
+        "encounter_id": "ENC-102"
       }
     ]
   },
   {
-    "patient_id": "P-102",
+    "patient_id": "PAT-102",
     "mrn": "MRN1002B",
-    "full_name": "Emily Davis",
-    "birth_date": "1992.07.21",
+    "full_name": "Sophia Lin",
+    "birth_date": "1994.08.22",
     "gender": "Female",
-    "phone": "555-987-6543",
-    "email": "emily.davis@healthnet.org",
+    "phone": "555-876-5432",
+    "email": "sophia.lin@carefirst.org",
     "documents": [
       {
-        "id": "DOC-JSON-002",
-        "title": "Inpatient Discharge Summary",
+        "id": "DOC-102",
+        "title": "Pulmonology Inpatient Discharge Summary",
         "category": "discharge-summary",
-        "date": "2023-11-05",
+        "date": "2023-11-05T11:00:00Z",
         "clinician": "Dr. Sarah Chen, MD",
-        "content_text": "31-year-old female admitted for acute exacerbation of severe asthma. Responded favorably to systemic intravenous corticosteroid pulse therapy and bronchodilator nebulization. Peak expiratory flow improved from 210 L/min to 420 L/min. Discharged on fluticasone/salmeterol inhaler with outpatient pulmonology follow-up.",
-        "encounter_id": "ENC-002"
+        "content_text": "29yo female admitted for status asthmaticus refractory to home albuterol. Received IV methylprednisolone pulse, continuous nebulized bronchodilators, and supplemental oxygen. SpO2 normalized to 98% on ambient air. Discharged on fluticasone/salmeterol DPI.",
+        "encounter_id": "ENC-102"
       }
     ],
     "diagnostic_reports": [
       {
-        "id": "RPT-JSON-002",
+        "id": "RPT-102",
         "code": "24606-6",
-        "code_display": "Chest X-ray single view frontal",
+        "code_display": "Chest X-Ray Single View (Frontal)",
         "category": "RAD",
-        "effective_date": "11/04/2023 09:15",
+        "effective_date": "2023-11-04T09:15:00Z",
         "status": "final",
-        "conclusion": "Bilateral hyperinflation without focal consolidation, pneumothorax, or pleural effusion.",
+        "conclusion": "Bilateral pulmonary hyperinflation with flattened diaphragms. No focal consolidation, pneumothorax, or acute pleural effusion.",
         "results": {
           "hyperinflation": "present",
-          "consolidation": "none",
-          "pneumothorax": "none"
+          "consolidation": "negative"
         },
-        "encounter_id": "ENC-002"
+        "encounter_id": "ENC-102"
       }
     ]
   },
   {
-    "patient_id": "P-103",
+    "patient_id": "PAT-103",
     "mrn": "MRN-1003-C",
-    "full_name": "Robert Martinez",
-    "birth_date": "11-03-1965",
+    "full_name": "Arthur Pendelton",
+    "birth_date": "11-03-1952",
     "gender": "MALE",
-    "phone": "555-333-4444",
-    "email": "rmartinez@email.com",
+    "phone": "555-444-9911",
+    "email": "arthur.p@provider.com",
     "documents": [
       {
-        "id": "DOC-JSON-003",
-        "title": "Cardiology Progress Note",
+        "id": "DOC-103",
+        "title": "Cardiology Outpatient Follow-up",
         "category": "clinical-note",
-        "date": "12-01-2023",
+        "date": "2023-12-01T10:15:00Z",
         "clinician": "Dr. Marcus Vance",
-        "content_text": "Follow-up for known ischemic cardiomyopathy. Patient reports mild exertional dyspnea when climbing two flights of stairs. Orthopnea denied. Medication adherence to carvedilol and lisinopril confirmed. Plan: continue current guideline-directed medical therapy.",
-        "encounter_id": "ENC-003"
+        "content_text": "71yo male with ischemic cardiomyopathy (LVEF 30%) and NYHA Class III heart failure. Reports increasing peripheral edema (+2 pitting) and two-pillow orthopnea over 1 week. Medication adherence to carvedilol and sacubitril/valsartan verified. Upped furosemide to 80mg daily.",
+        "encounter_id": "ENC-103"
       }
     ],
-    "diagnostic_reports": []
+    "diagnostic_reports": [
+      {
+        "id": "RPT-103",
+        "code": "33762-6",
+        "code_display": "NT-proBNP Serum Cardiac Biomarker",
+        "category": "LAB",
+        "effective_date": "2023-12-01T11:00:00Z",
+        "status": "final",
+        "conclusion": "NT-proBNP markedly elevated at 4,820 pg/mL (normal < 450 pg/mL), indicating acute decompensated congestive heart failure.",
+        "results": {
+          "nt_probnp": "4820 pg/mL"
+        },
+        "encounter_id": "ENC-103"
+      }
+    ]
   },
   {
-    "patient_id": "P-103-CONFLICT",
+    "patient_id": "PAT-103-CONFLICT",
     "mrn": "MRN-1003-C",
-    "full_name": "Bob Martinez",
-    "birth_date": "1965/11/03",
+    "full_name": "Art Pendelton",
+    "birth_date": "1952/11/03",
     "gender": "m",
-    "phone": "555-333-4444",
-    "email": "rmartinez@email.com",
+    "phone": "555-444-9911",
+    "email": "arthur.p@provider.com",
     "documents": [],
     "diagnostic_reports": []
   },
   {
-    "patient_id": "P-104",
+    "patient_id": "PAT-104",
     "mrn": "MRN-1004-D",
-    "full_name": "Sarah Connor",
+    "full_name": "Sarah Jenkins",
     "birth_date": "1985-12-30T00:00:00Z",
     "gender": "f",
     "phone": null,
     "email": null,
     "documents": [
       {
-        "id": "DOC-JSON-004",
+        "id": "DOC-104",
         "title": "Neurology Outpatient Evaluation",
         "category": "clinical-note",
-        "date": "2024-01-15T11:20:00",
-        "clinician": null,
-        "content_text": "Patient presents with persistent hemicranial throbbing headaches accompanied by photophobia and nausea for 3 weeks. Visual aura noted prior to episodes. Neurological exam reveals intact cranial nerves II-XII, symmetrical reflexes. Recommended MRI Brain with contrast.",
+        "date": "2024-01-15T11:20:00Z",
+        "clinician": "Dr. Julian Croft, MD",
+        "content_text": "38yo female presents with 3-week history of throbbing unilateral temporal headaches with scintillating scotoma and nausea. Symptoms worsen with physical exertion. Cranial nerve exam intact without focal sensorimotor deficit.",
         "encounter_id": null
       }
     ],
     "diagnostic_reports": [
       {
-        "id": "RPT-JSON-004",
+        "id": "RPT-104",
         "code": "30623-3",
-        "code_display": "MRI Brain with and without IV contrast",
+        "code_display": "MRI Brain with & without Gadolinium Contrast",
         "category": "RAD",
-        "effective_date": "01/18/2024",
-        "status": "FINAL",
-        "conclusion": "No acute intracranial hemorrhage, mass effect, or abnormal parenchymal enhancement. Mild scattered non-specific white matter microvascular changes.",
+        "effective_date": "2024-01-18T14:00:00Z",
+        "status": "final",
+        "conclusion": "No acute intracranial hemorrhage or mass effect. Mild punctate white matter hyperintensities in frontoparietal regions, likely microvascular/migrainous in etiology.",
         "results": {
           "mass_effect": "negative",
-          "hemorrhage": "negative"
+          "white_matter": "punctate hyperintensities"
         },
         "encounter_id": null
       }
     ]
   }
 ]
-
