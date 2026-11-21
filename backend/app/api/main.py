@@ -183,3 +183,10 @@ if frontend_dist.exists():
 elif frontend_dir.exists():
     app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("backend.app.api.main:app", host="0.0.0.0", port=port)
+
+

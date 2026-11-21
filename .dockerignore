@@ -1,0 +1,9 @@
+.git
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+node_modules
+.DS_Store
+backend/data/processed/*.db
